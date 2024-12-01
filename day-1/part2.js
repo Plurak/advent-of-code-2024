@@ -18,15 +18,13 @@ lists.split("\n").forEach((line) => {
 
 function calcSimilarity(left, right) {
     let result = 0;
-    for (let i = 0; i < left.length; i++) {
+
+    left.forEach(numLeft => {
         let count = 0;
-        for (let j = 0; j < left.length; j++) {
-            if (left[i] === right[j]) {
-                count++;
-            }
-        }
-        result += left[i] * count;
-    }
+        right.filter(numRight => numRight === numLeft).forEach(() => count++);
+        result += numLeft * count;
+    });
+
     return result;
 }
 
