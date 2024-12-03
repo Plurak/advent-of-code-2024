@@ -1,15 +1,10 @@
-let lists = 
-`3   4
-4   3
-2   5
-1   3
-3   9
-3   3`;
+const fs = require('fs');
+const data = fs.readFileSync('./input/final-data.txt', 'utf-8');
 
 let left = [];
 let right = [];
 
-lists.split("\n").forEach((line) => {
+data.split("\n").forEach((line) => {
     line = line.split(/\s+/);
 
     left.push(Number(line[0]));

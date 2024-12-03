@@ -1,4 +1,5 @@
-const data = `xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))`;
+const fs = require('fs');
+const data = fs.readFileSync('./input/final-data.txt', 'utf-8');
 
 const matches = data.match(/mul\((\d+),(\d+)\)|do\(\)|don't\(\)/g);
 
