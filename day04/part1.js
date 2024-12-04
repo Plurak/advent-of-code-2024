@@ -1,8 +1,8 @@
 const fs = require('fs');
-const data = fs.readFileSync('./input/test-data.txt', 'utf-8');
+const data = fs.readFileSync('./input/final-data.txt', 'utf-8');
 
 let input = [];
-let wordToFind = [
+let wordsToFind = [
     "XMAS",
     "SAMX"
 ];
@@ -16,17 +16,13 @@ let count = 0;
 
 function searchWordInStrings(input) {
     for (let i = 0; i < input.length; i++) {
-
-        if (input[i].includes(wordToFind[0])) {
-            // console.log(`Das Wort "${wordToFind[0]}" ist enthalten.`);
-            count++;
-        }
-
-        if (input[i].includes(wordToFind[1])) {
-            // console.log(`Das Wort "${wordToFind[1]}" ist enthalten.`);
-            count++;
+        for (let word of wordsToFind) {
+            let occurrences = input[i].split(word).length - 1;
+            count += occurrences;
         }
     }
+
+    return count;
 }
 
 function searchHorizontaly(input) {
@@ -55,60 +51,56 @@ function searchVertically(input) {
     return;
 }
 
-//! This function is not working yet
 function searchDiagonally(input) {
     let diagonalStrings = [];
 
-    for (let i = 0; i < input.length; i++) {
+    for (let i = 0; i < input.length; i++) { // start from the left side
         let downDiagonal = "";
         let upDiagonal = "";
     
         for (let j = 0; j < input[0].length; j++) {
             if (input[i + j] !== undefined && input[i + j][j] !== undefined) {
-                downDiagonal += input[i + j][j];
+                downDiagonal += input[i + j][j]; // from top left to bottom right
             }
-            // if (input[i - j] !== undefined && input[i - j][j] !== undefined) {
-            //     upDiagonal += input[i - j][j];
-            // }
+            if (input[i - j] !== undefined && input[i - j][j] !== undefined) {
+                upDiagonal += input[i - j][j]; // from bottom left to top right
+            }
         }
-    
-        diagonalStrings.push(downDiagonal);
-        diagonalStrings.push(upDiagonal);
 
-        // console.log("downDiagonal: " + downDiagonal + " upDiagonal: " + upDiagonal);
-        
+        diagonalStrings.push(downDiagonal, upDiagonal);
     }
 
-    for (let i = 0; i < input.length; i++) {
+    for (let i = 0; i < input.length; i++) { // start from the right side
         let downDiagonal = "";
         let upDiagonal = "";
     
         for (let j = 0; j < input[0].length; j++) {
             if (input[i + j] !== undefined && input[i + j][input[0].length - 1 - j] !== undefined) {
-                downDiagonal += input[i + j][input[0].length - 1 - j];
+                downDiagonal += input[i + j][input[0].length - 1 - j]; // from top right to bottom left
             }
-            // if (input[i - j] !== undefined && input[i - j][input[0].length - 1 - j] !== undefined) {
-            //     upDiagonal += input[i - j][input[0].length - 1 - j];
-            // }
+            if (input[i - j] !== undefined && input[i - j][input[0].length - 1 - j] !== undefined) {
+                upDiagonal += input[i - j][input[0].length - 1 - j]; // from bottom right to top left
+            }
         }
-    
-        diagonalStrings.push(downDiagonal);
-        diagonalStrings.push(upDiagonal);
+
+        diagonalStrings.push(downDiagonal, upDiagonal);
     }
 
+    diagonalStrings.splice(0, 1);
+    let middleIndex = Math.floor(diagonalStrings.length / 2);
+    if (middleIndex + 1 < diagonalStrings.length) {
+        diagonalStrings.splice(middleIndex, 1);
+    }
 
-    
-    searchWordInStrings(diagonalStrings);
-
-    return;
+    return searchWordInStrings(diagonalStrings);
 }
 
 function searchForWord(input) {
     searchHorizontaly(input);
     searchVertically(input);
-    // searchDiagonally(input);
+    searchDiagonally(input);
 
     return count;
 }
 
-console.log("Das Ergebnis ist: " + searchForWord(input));
+console.log(searchForWord(input));
